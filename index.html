@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CSV Data Reader</title>
+</head>
+<body>
+    <h1>Table 1</h1>
+    <table id="csvTable">
+
+       
+
+    </table>
+    <h1>Table 2</h1>
+    <table id="table2">
+
+        <tr>
+            <th>Category</th>
+            <th>Value</th>
+        </tr>
+
+    </table>
+    <script>
+        // Function to read data from the CSV file and update Table 1
+        function readCSVData(file) {
+            fetch(file)
+                .then(response => response.text())
+                .then(data => {
+                    const lines = data.split('\n');
+                    const table = document.getElementById('csvTable');
+
+                    lines.forEach(line => {
+                        const [index, value] = line.split(',');
+                        const row = document.createElement('tr');
+                        const indexCell = document.createElement('td');
+                        const valueCell = document.createElement('td');
+
+                        indexCell.textContent = index;
+                        valueCell.textContent = value;
+
+                        row.appendChild(indexCell);
+                        row.appendChild(valueCell);
+                        table.appendChild(row);
+                    });
+
+                    // Call the function to process data for Table 2
+                    processTable2Data(lines);
+                })
+                .catch(error => console.error('Error reading CSV:', error));
+        }
+
+        // Function to process data for Table 2
+        function processTable2Data(lines) {
+            const table2 = document.getElementById('table2');
+
+            // Calculate values for Table 2
+            const value1 = parseInt(lines[5].split(',')[1]) + parseInt(lines[20].split(',')[1]);
+            const value2 = parseInt(lines[15].split(',')[1]) / parseInt(lines[7].split(',')[1]);
+            const value3 = parseInt(lines[13].split(',')[1]) * parseInt(lines[12].split(',')[1]);
+
+            // Display Table 2
+            displayTableRow(table2, "Alpha", value1);
+            displayTableRow(table2, "Beta", value2);
+            displayTableRow(table2, "Charlie", value3);
+        }
+
+        // Function to add a row to Table 2
+        function displayTableRow(table, category, value) {
+            const row = document.createElement('tr');
+            const categoryCell = document.createElement('td');
+            const valueCell = document.createElement('td');
+
+            categoryCell.textContent = category;
+            valueCell.textContent = value;
+
+            row.appendChild(categoryCell);
+            row.appendChild(valueCell);
+            table.appendChild(row);
+        }
+
+        // Call the function to read data from the CSV file
+        readCSVData('Table_Input.csv');
+    </script>
+</body>
+</html>
